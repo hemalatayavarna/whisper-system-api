@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="impl-whispir-user:create:subflow" doc:id="471aaf42-8453-4164-a408-28fb7f336b90" >
+		<logger level="INFO" doc:name="Log Start Impl User Create Request" doc:id="533761bb-63a6-4815-855e-6562aa9ffc9d" message="Log Start Impl User Create Request"/>
+		<ee:transform doc:name="Set Variables: whispirRequest, finalPayload, failed, success" doc:id="94342b78-4df7-4f1a-be7e-263e53c5b14a">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="whispirRequest"><![CDATA[%dw 2.0
+import p from Mule
+output application/java
+---
+{
+	"method": p('rest.api.method.post'),
+	"path": p('whispir.path.users'),
+	"headers": {
+		"accept": p('whispir.header.accept.user'),
+		"contentType": p('whispir.header.contentType.user')
+	}
+}]]></ee:set-variable>
+				<ee:set-variable variableName="finalPayload" ><![CDATA[%dw 2.0
+output application/json
+---
+[]]]></ee:set-variable>
+				<ee:set-variable variableName="success" ><![CDATA[%dw 2.0
+output application/java
+---
+false]]></ee:set-variable>
+				<ee:set-variable variableName="failed" ><![CDATA[%dw 2.0
+output application/java
+---
+false]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="c06657ac-e456-464b-9634-c3d6d51d7fa5" collection="#[payload]">
+			<ee:transform doc:name="Set Request Payload, Set Variable: userName" doc:id="e2fba693-28c2-4ffc-a7eb-7c57b1b3af6e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"userName": payload.userName as String,
+	"password": payload.password as String,
+	"firstName": payload.firstName as String,
+	"lastName": payload.lastName as String,
+	"workCountry": payload.workCountry default Mule::p('default.work.country'),
+	"timezone": payload.timezone default Mule::p('default.timezone'),
+	"workEmailAddress1": payload.workEmailAddress1 as String
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="userName" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.userName]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<try doc:name="Try" doc:id="7c561173-0a00-4c1d-83be-bac9cbe99781" >
+				<flow-ref doc:name="sys-whispir:request:subflow" doc:id="8a989f32-1cdd-4242-9eaf-6817c52c28e9" name="sys-whispir:request:subflow" />
+				<ee:transform doc:name="Set finalPayload, Set variable: success" doc:id="caeedddc-b17b-44fd-b2ea-80840b2fdcda" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="finalPayload" ><![CDATA[%dw 2.0
+output application/json
+var newItem =
+  {
+    id: payload.id,
+    userName: payload.userName,
+    status: payload.status
+  }
+
+---
+vars.finalPayload + newItem]]></ee:set-variable>
+						<ee:set-variable variableName="success" ><![CDATA[%dw 2.0
+output application/java
+---
+true]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="3dd5f4e3-b097-423b-a461-b5dba62a8534" >
+						<logger level="DEBUG" doc:name="Log Error when invoking Whispir" doc:id="a703b85e-cd64-4077-b88f-143ac1859c7c" message="#[error.errorMessage.payload]"/>
+						<ee:transform doc:name="Set finalPayload with Error, Set variable: failed" doc:id="7c5226f2-6e3c-40fc-8f44-7496fe784bbe" >
+							<ee:message />
+							<ee:variables >
+								<ee:set-variable variableName="finalPayload" ><![CDATA[%dw 2.0
+output application/json
+var newItem =
+  {
+    userName: vars.userName,
+    status: Mule::p('error.response.code'),
+    errorText: error.errorMessage.payload.errorText
+  }
+
+---
+vars.finalPayload + newItem]]></ee:set-variable>
+								<ee:set-variable variableName="failed" ><![CDATA[%dw 2.0
+output application/java
+---
+true]]></ee:set-variable>
+							</ee:variables>
+						</ee:transform>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+		<ee:transform doc:name="Set Response Payload and httpStatus" doc:id="effcb966-a2ac-451f-a929-6d42fb57c9b1">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.finalPayload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/json
+var success:Boolean = vars.success as Boolean
+var failed:Boolean = vars.failed as Boolean
+---
+if (failed and not success)
+    Mule::p('http.status.code.unprocessable.entity')
+else if (failed and success)
+    Mule::p('http.status.code.partial.content')
+else
+    Mule::p('http.status.code.created')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log End Impl User Create Request" doc:id="24288fc1-8cae-4753-9030-76d436a4d421" message="Log End Impl User Create Request" />
+	</sub-flow>
+</mule>

@@ -1,0 +1,20 @@
+[
+  {
+    "userName": "StevenRevill103",
+    "password": "RAzasdaw23",
+    "firstName": "Steven",
+    "lastName": "Revill",
+    "workCountry": "Australia",
+    "timezone": "Australia/Adelaide",
+    "workEmailAddress1": "steve@test.com"
+  },
+  {
+    "userName": "ClaudiaKralik135",
+    "password": "dasfA1sfas",
+    "firstName": "Claudia",
+    "lastName": "Kralik",
+    "workCountry": "Australia",
+    "timezone": "Australia/Adelaide",
+    "workEmailAddress1": "claudia@test.com"
+  }
+]

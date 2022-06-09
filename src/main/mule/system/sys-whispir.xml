@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="sys-whispir:request:subflow" doc:id="5e20fec4-38e7-4d28-9c53-c675d562e540" >
+		<logger level="INFO" doc:name="Start Whispir System" doc:id="28d90b34-57a1-4ce0-be2c-59d46d551fd0" message="Start Whispir System"/>
+		<ee:transform doc:name="Set Variable: whispirHeaders" doc:id="4d05db71-e9a4-4ef1-bb89-31c99e6fa8b0" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="whispirHeaders" ><![CDATA[%dw 2.0
+import * from dw::core::Binaries
+import modules::WhispirAuth
+output application/java
+---
+{
+	"Accept": vars.whispirRequest.headers.accept,
+	"Content-Type": vars.whispirRequest.headers.contentType,
+	"Authorization": "Basic " ++ WhispirAuth::generateAuth(),
+	"X-Api-Key": Mule::p('secure::whispir.apiKey')
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="whispirRequest Variable" doc:id="347921d1-54a7-4f04-a5f2-846de91ab7c6" message="#[vars.whispirRequest]"/>
+		<http:request method="#[vars.whispirRequest.method]" doc:name="Whispir Request" doc:id="52702e6f-08bf-4d23-8edd-900153bb06cc" config-ref="whispir-httpRequesterConfig" path="#[vars.whispirRequest.path]">
+			<http:headers ><![CDATA[#[vars.whispirHeaders]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="End Whispir System" doc:id="2c80fe03-3180-438c-909c-7a21ca8c2b82" message="End Whispir System" />
+	</sub-flow>
+</mule>

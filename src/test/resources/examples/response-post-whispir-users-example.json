@@ -1,0 +1,36 @@
+{
+    "id": "70E798BB96421BF7",
+    "userName": "SteveTest19042026-1",
+    "password": "",
+    "status": "PENDING",
+    "firstName": "TEST",
+    "lastName": "USER",
+    "personalCountry": "Australia",
+    "workCountry": "Australia",
+    "workPostalCountry": "Australia",
+    "timezone": "Australia/Adelaide",
+    "link": [
+        {
+            "uri": "https://api.au.whispir.com/users/70E798BB96421BF7",
+            "rel": "self",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/users/70E798BB96421BF7",
+            "rel": "updateUser",
+            "method": "PUT",
+            "type": "application/vnd.whispir.user-v1+xml,application/vnd.whispir.user-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/users/70E798BB96421BF7",
+            "rel": "deleteUser",
+            "method": "DELETE",
+            "host": "api.au.whispir.com",
+            "port": -1
+        }
+    ]
+}

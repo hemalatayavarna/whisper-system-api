@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="8ea17a7b-c563-4718-b3f9-91fd33393510" file="config/app-config-${env}.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="6414ba2b-43ba-4802-9d3b-92c415166c81" file="config/app-config-global.properties" />
+	
+	<http:request-config
+		name="whispir-httpRequesterConfig"
+		doc:name="HTTP Request configuration"
+		doc:id="c8cc9298-6a96-456b-88c5-44ff24ad0fcc"
+		responseTimeout="${whispir.response.timeout}">
+		<http:request-connection
+			protocol="${whispir.protocol}"
+			host="${whispir.host}" port="${whispir.port}"
+			maxConnections="${whispir.maxconnections}"
+			connectionIdleTimeout="${whispir.timeout}"
+			responseBufferSize="${whispir.bufferSize}">
+			<reconnection >
+				<reconnect frequency="${whispir.reconnection.frequency}" count="${whispir.reconnection.attempts}" />
+			</reconnection>
+		</http:request-connection>
+	</http:request-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="cd52f1d5-e927-4bbc-9b8c-02b61aeee770" file="config/app-config-${env}.properties" key="${secure.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<secure-properties:config name="Secure_Properties_Global_Config" doc:name="Secure Properties Config" doc:id="cd52f1d5-e927-4bbc-9b8c-02b61aeee770" file="config/app-config-global.properties" key="${secure.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<api-gateway:autodiscovery apiId="${api.autodiscovery.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="0eb4f2f3-730b-468f-8d7f-82961f74b271" flowRef="whispir-system-api-main" />
+	<http:request-config
+		name="error-audit-system-api-httpRequesterConfig"
+		doc:name="HTTP Request configuration"
+		doc:id="e73d5ade-dce4-448d-b221-ae78309d41c8"
+		basePath="${error.sys.api.basepath}"
+		responseTimeout="${error.sys.api.response.timeout}">
+		<http:request-connection
+			protocol="${error.sys.api.protocol}"
+			host="${error.sys.api.host}" port="${error.sys.api.port}"
+			maxConnections="${error.sys.api.maxconnections}"
+			connectionIdleTimeout="${error.sys.api.timeout}"
+			responseBufferSize="${error.sys.api.bufferSize}">
+			<reconnection >
+				<reconnect frequency="${error.sys.reconnection.frequency}" count="${error.sys.reconnection.attempts}" />
+			</reconnection>
+			<tls:context >
+				<tls:trust-store insecure="true" />
+			</tls:context>
+		</http:request-connection>
+	</http:request-config>
+</mule>

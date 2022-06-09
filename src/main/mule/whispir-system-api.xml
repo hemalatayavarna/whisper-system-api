@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+    <http:listener-config name="whispir-system-api-httpListenerConfig">
+        <http:listener-connection host="${http.private.host}" port="${https.port}" readTimeout="${http.read.timeout}" connectionIdleTimeout="${http.connection.idle.timeout}" protocol="HTTPS">
+            <tls:context>
+                <tls:key-store path="${https.keystore.path}" keyPassword="${secure::https.keystore.key.password}" password="${secure::https.keystore.store.password}" type="jks" />
+            </tls:context>
+        </http:listener-connection>
+    </http:listener-config>
+    <apikit:config name="whispir-system-api-config" api="resource::e158212d-36c8-4172-830d-4c8c71836894:whispir-system-api:0.0.9:raml:zip:whispir-system-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="whispir-system-api-main" doc:id="1621e9f7-55a6-494d-acb2-5ae3534ca3b3">
+        <http:listener config-ref="whispir-system-api-httpListenerConfig" path="${api.http.path}${api.http.version}">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="whispir-system-api-config" />
+        <error-handler ref="api-kit-error-handler" />
+    </flow>
+    <flow name="post:\workspaces:application\json:whispir-system-api-config" doc:id="63a5b59f-d513-4aa4-8346-d75ed05c6413">
+        <logger level="INFO" doc:name="Log Start to POST Workspaces" doc:id="a63e0956-5497-4613-b228-f7104381caa8" message="Log Start to POST Workspaces" />
+        <flow-ref doc:name="impl-whispir-workspace:subflow" doc:id="813bc22a-64bd-4ae6-ad15-e6bcabfb3d76" name="impl-whispir-workspace:subflow" />
+        <logger level="INFO" doc:name="Log End to POST Workspaces" doc:id="44db87c2-8b61-4a86-99a9-88fb3ad8898f" message="Log End to POST Workspaces" />
+        <error-handler ref="business-error-handler" />
+    </flow>
+    <flow name="post:\workspaces\(workspaceId)\contacts:application\json:whispir-system-api-config" doc:id="79904220-a75d-4350-a420-d7c3fb98f511">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="workspaceId">attributes.uriParams.'workspaceId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: "BDBBD070D1D02434"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <error-handler ref="business-error-handler" />
+    </flow>
+    <flow name="post:\users:application\json:whispir-system-api-config" doc:id="c26061cc-c60c-4100-82df-10f31985638c">
+        <logger level="INFO" doc:name="Log Start to POST Users" doc:id="04fedd19-43e7-4d99-95f9-3b110a1237b8" message="Log Start to POST Users" />
+        <flow-ref doc:name="impl-whispir-user:create:subflow" doc:id="fb075d58-4200-4c4e-b705-a7c28d820384" name="impl-whispir-user:create:subflow" />
+        <logger level="INFO" doc:name="Log End to POST Users" doc:id="d2dcdd4b-bc85-4997-bd9c-57b591100de5" message="Log End to POST Users" />
+        <error-handler ref="business-error-handler" />
+    </flow>
+    <flow name="post:\workspaces\(workspaceId)\distribution-lists:application\json:whispir-system-api-config" doc:id="8f3afed0-279d-4fe9-bd20-12024d169315">
+        <logger level="INFO" doc:name="Log Start to POST Distribution Lists" doc:id="944c3165-5baa-4380-b09b-b58119d3be70" message="Log Start to POST Distribution Lists" />
+		<ee:transform doc:name="Set Variable workspaceId">
+            <ee:variables>
+                <ee:set-variable variableName="workspaceId">attributes.uriParams.'workspaceId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<flow-ref doc:name="impl-whispir-distribution-list:create:subflow" doc:id="94278c80-6c19-4924-b13d-8933b4c14566" name="impl-whispir-distribution-list:create:subflow"/>
+		<logger level="INFO" doc:name="Log End to POST Distribution Lists" doc:id="60ece99b-0989-4646-b9d8-8c4e1edba80c" message="Log End to POST Distribution Lists" />
+		<error-handler ref="business-error-handler" />
+    </flow>
+</mule>

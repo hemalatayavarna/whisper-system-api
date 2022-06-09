@@ -1,0 +1,160 @@
+{
+    "id": "4B87255D59AA2C71",
+    "projectName": "A Space Odessey3",
+    "projectNumber": "2001",
+    "status": "A",
+    "billingcostcentre": "Hollywood",
+    "link": [
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71",
+            "rel": "self",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71",
+            "rel": "editWorkspaces",
+            "method": "PUT",
+            "type": "application/vnd.whispir.workspace-v1+xml,application/vnd.whispir.workspace-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/messages",
+            "rel": "retrieveMessage",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/messages",
+            "rel": "createMessage",
+            "method": "POST",
+            "type": "application/vnd.whispir.message-v1+xml,application/vnd.whispir.message-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/messages",
+            "rel": "createMessage",
+            "method": "POST",
+            "type": "application/vnd.whispir.bulkmessage-v1+xml,application/vnd.whispir.bulkmessage-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/contacts",
+            "rel": "retrieveContacts",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/contacts",
+            "rel": "createContact",
+            "method": "POST",
+            "type": "application/vnd.whispir.contact-v1+xml,application/vnd.whispir.contact-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/users",
+            "rel": "createUser",
+            "method": "POST",
+            "type": "application/vnd.whispir.user-v1+xml,application/vnd.whispir.user-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/users",
+            "rel": "retrieveUsers",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/templates",
+            "rel": "createTemplate",
+            "method": "POST",
+            "type": "application/vnd.whispir.template-v1+xml,application/vnd.whispir.template-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/templates",
+            "rel": "retrieveTemplates",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/distributionlists",
+            "rel": "createDistList",
+            "method": "POST",
+            "type": "application/vnd.whispir.distributionlist-v1+xml,application/vnd.whispir.distributionlist-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/distributionlists",
+            "rel": "retrieveDistLists",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/scenarios",
+            "rel": "createScenario",
+            "method": "POST",
+            "type": "application/vnd.whispir.scenario-v1+xml,application/vnd.whispir.scenario-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/scenarios",
+            "rel": "retrieveScenarios",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/responserules",
+            "rel": "retrieveResponseRules",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/4B87255D59AA2C71/responserules",
+            "rel": "createResponseRule",
+            "method": "POST",
+            "type": "application/vnd.whispir.responserule-v1+xml,application/vnd.whispir.responserule-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/resources",
+            "rel": "createResource",
+            "method": "POST",
+            "type": "application/vnd.whispir.resource-v1+xml,application/vnd.whispir.resource-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/resources",
+            "rel": "retrieveResources",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/resources",
+            "rel": "importContacts",
+            "method": "POST",
+            "type": "application/vnd.whispir.importcontact-v1+xml,application/vnd.whispir.importcontact-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        }
+    ]
+}

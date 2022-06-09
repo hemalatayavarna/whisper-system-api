@@ -1,0 +1,39 @@
+{
+    "name": "Distribution List Steve3",
+    "description": "TEST",
+    "access": "Open",
+    "type": "dynamic",
+    "entityType": "Contact",
+    "visibility": "Public",
+    "rules": [
+        {
+            "ruleFilter": "firstName",
+            "ruleFilterActualName": "First Name",
+            "ruleContent": "S*"
+        }
+    ],
+    "link": [
+        {
+            "uri": "https://api.au.whispir.com/workspaces/BD319061F075BE62/distributionlists/B53F5D6AE4C95BA0",
+            "rel": "self",
+            "method": "GET",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/BD319061F075BE62/distributionlists/B53F5D6AE4C95BA0",
+            "rel": "updateDistList",
+            "method": "PUT",
+            "type": "application/vnd.whispir.distributionlist-v1+xml,application/vnd.whispir.distributionlist-v1+json",
+            "host": "api.au.whispir.com",
+            "port": -1
+        },
+        {
+            "uri": "https://api.au.whispir.com/workspaces/BD319061F075BE62/distributionlists/B53F5D6AE4C95BA0",
+            "rel": "deleteDistList",
+            "method": "DELETE",
+            "host": "api.au.whispir.com",
+            "port": -1
+        }
+    ]
+}

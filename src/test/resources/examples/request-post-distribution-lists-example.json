@@ -1,0 +1,15 @@
+{
+  "name" : "Distribution List",
+  "description" : "Distribution List Description",
+  "access" : "Open",
+  "visibility" : "Public",
+  "type": "dynamic",
+  "entityType":"contact",
+  "rules": [
+    {
+      "ruleFilter": "firstName",
+      "ruleFilterActualName": "First Name",
+      "ruleContent": "S*"
+    }
+  ]
+}

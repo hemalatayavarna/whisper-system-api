@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="impl-whispir-distribution-list:create:subflow" doc:id="dee8177a-1322-4d63-9418-21fc328ad023" >
+		<logger level="INFO" doc:name="Log Start Impl Distribution List Create Request" doc:id="a8eaee5d-6b79-433f-89f4-65e3e9227fb4" message="Log Start Impl Distribution List Create Request"/>
+		<ee:transform doc:name="Set Payload and Set Variable: whispirRequest" doc:id="f06377ce-8186-44cc-955b-555f7904aa1e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json skipNullOn="everywhere"
+---
+{
+	"name": payload.name,
+	"description": payload.description,
+	"access": payload.access,
+	"visibility": payload.visibility,
+	"contactIds": payload.contactIds,
+	"userIds": payload.userIds,
+	"distListIds": payload.distListIds,
+	"type": payload."type",
+	"entityType": payload.entityType,
+	"rules": payload.rules
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="whispirRequest" ><![CDATA[%dw 2.0
+import p from Mule
+output application/java
+var wsPath = p('whispir.path.workspaces')
+var dlPath = p('whispir.path.distributionlists')
+var workspaceId = vars.workspaceId default ""
+var path = "$(wsPath)/$(workspaceId)/$(dlPath)"
+---
+{
+	"method": p('rest.api.method.post'),
+	"path": path,
+	"headers": {
+		"accept": p('whispir.header.accept.distributionlist'),
+		"contentType": p('whispir.header.contentType.distributionlist')
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="sys-whispir:request:subflow" doc:id="b5aaccad-3888-45c0-9745-33480fe7b585" name="sys-whispir:request:subflow"/>
+		<ee:transform doc:name="Set Payload" doc:id="85a605d9-f1aa-480f-aa2c-f36bef8a3864" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/json
+
+// get the Self Link
+var selfLink = payload.link filter ($.rel == "self")
+// convert it to an object
+var linkObject = selfLink reduce ($ ++ $$)
+// get the ID from the URI
+var id = substringAfterLast(linkObject.uri, "/")
+---
+{
+    "id": id
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log End Impl Distribution List Create Request" doc:id="904f2f89-352d-4a1b-94a8-9693f6c63f4e" message="Log End Impl Distribution List Create Request" />
+	</sub-flow>
+</mule>

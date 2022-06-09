@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="whispir-sapi-test-suite.xml" />
+	<munit:test name="whispir-sapi-test-suite:post-workspaces" doc:id="e650faa7-fbea-41a2-bb53-24ad82daae14" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Whispir Request" doc:id="b0121c2a-6e97-48af-991a-66240d05d4c2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Whispir Request" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('examples/response-post-whispir-workspace-example.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="6f716247-7b51-4dde-848c-09d44a18c381" >
+				<munit:payload value="#[MunitTools::getResourceAsString('examples/request-post-workspace-example.json')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="post:\workspaces:application\json:whispir-system-api-config" doc:id="662db3f9-7244-4eab-ba60-267b3ff02c64" name="post:\workspaces:application\json:whispir-system-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call Log End to POST Workspaces" doc:id="58b3000b-25ea-4c30-bd70-8574d05bf3fd" processor="logger">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log End to POST Workspaces" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="whispir-sapi-test-suite:post-workspaces-contacts" doc:id="249f4fa7-9325-4ae4-a6a2-1e070a6363a1" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Whispir Request" doc:id="e61b79fe-9297-49ae-8e26-fe55c927a3b5" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Whispir Request" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('examples/response-post-whispir-workspace-contacts-example.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="post:\workspaces\(workspaceId)\contacts:application\json:whispir-system-api-config" doc:id="d07e2c74-3a53-40cb-af47-44fd9e5be505" name="post:\workspaces\(workspaceId)\contacts:application\json:whispir-system-api-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="whispir-sapi-test-suite:post-users" doc:id="cf3dcad1-d1c6-4e1e-8c43-13e3314d7bd4" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Whispir Request" doc:id="6c2c9eee-c835-4e6a-b64c-943ee7678433" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Whispir Request" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('examples/response-post-whispir-users-error-example.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="56105ecd-456a-4a5e-ae7e-12a39544a8f9" >
+				<munit:payload value="#[MunitTools::getResourceAsString('examples/request-post-users-example.json')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="post:\users:application\json:whispir-system-api-config" doc:id="0857c47a-20ab-4406-901b-a8b40dc08e1a" name="post:\users:application\json:whispir-system-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call Log End to POST Users" doc:id="581747a3-3848-4958-b5c1-e717d447098e" processor="logger">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log End to POST Users" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="whispir-sapi-test-suite:post-users-error" doc:id="0b1edcdf-854a-4e0b-8acd-c1b47e5c7891" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Whispir Request - Error MULE:UNKNOWN" doc:id="aaf6a764-3480-4c58-bca8-defeef26b16b" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Whispir Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="Whispir Request" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('examples/response-post-whispir-users-example.json')]" mediaType="application/json" />
+					<munit-tools:error typeId="MULE:UNKNOWN" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="aa590746-903f-4571-832d-f27be343142f" >
+				<munit:payload value="#[MunitTools::getResourceAsString('examples/request-post-users-example.json')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="post:\users:application\json:whispir-system-api-config" doc:id="ef1350b4-035a-42d2-8d00-3ce42ed28c41" name="post:\users:application\json:whispir-system-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call Log End to POST Users" doc:id="a5b27508-ff25-429a-9a89-1b054932a479" processor="logger">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log End to POST Users" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="whispir-sapi-test-suite:post-distribution-lists" doc:id="52adb929-9cc6-4551-b21c-e2dc6b201c31" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Whispir Request" doc:id="846c6bc6-5a09-496d-891b-848accd2a414" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Whispir Request" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('examples/response-post-whispir-distribution-lists-example.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="b8612f71-8ec0-4c79-a2ba-6f9948adb900" >
+				<munit:payload value="#[MunitTools::getResourceAsString('examples/request-post-distribution-lists-example.json')]" mediaType="application/json" />
+				<munit:attributes value="#[MunitTools::getResourceAsString('examples/request-post-attributes-distribution-lists-example.json')]" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="post:\workspaces\(workspaceId)\distribution-lists:application\json:whispir-system-api-config" doc:id="a8b8fa1f-c73c-46ba-ac30-5f7272590ab6" name="post:\workspaces\(workspaceId)\distribution-lists:application\json:whispir-system-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call Log End to POST Distribution Lists" doc:id="6e0c33dd-cd3d-42d1-b698-142bbd393f36" processor="logger">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log End to POST Distribution Lists" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+</mule>

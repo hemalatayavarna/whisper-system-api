@@ -1,0 +1,5 @@
+{
+    "errorSummary": "Your request did not contain all of the information required to perform this method. Please check your request for the required fields to be passed in and try again. Alternatively, contact your administrator or support@whispir.com for more information",
+    "errorText": " Password entered is too short (min 8 characters).\n Password entered is too short (min 6 characters).\n Password must have at least one uppercase and one lowercase character.",
+    "errorDetail": ""
+}
